@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024 Christian Stein
+ * Licensed under the Universal Permissive License v 1.0 -> https://opensource.org/license/upl
+ */
+
 import java.nio.file.*;
 import java.util.*;
 import java.util.function.*;

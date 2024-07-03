@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024 Christian Stein
+ * Licensed under the Universal Permissive License v 1.0 -> https://opensource.org/license/upl
+ */
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
