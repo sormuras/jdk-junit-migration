@@ -24,10 +24,27 @@ public class Migrate {
         List.of(
             MavenCoordinate.ofCentral(
                 "com.google.errorprone", "error_prone_core", "2.27.1", "with-dependencies"),
-            MavenCoordinate.ofCentral(
-                "tech.picnic.error-prone-support", "refaster-runner", "0.16.1"),
-            MavenCoordinate.ofCentral(
-                "tech.picnic.error-prone-support", "refaster-support", "0.16.1"));
+            new MavenCoordinate(
+                "jitpack.io/com/github/PicnicSupermarket",
+                "error-prone-support",
+                "refaster-runner",
+                "gdejong~testng-migrator-SNAPSHOT",
+                "",
+                "jar"),
+            new MavenCoordinate(
+                "jitpack.io/com/github/PicnicSupermarket",
+                "error-prone-support",
+                "refaster-support",
+                "gdejong~testng-migrator-SNAPSHOT",
+                "",
+                "jar"),
+            new MavenCoordinate(
+                "jitpack.io/com/github/PicnicSupermarket",
+                "error-prone-support",
+                "testng-junit-migrator",
+                "gdejong~testng-migrator-SNAPSHOT",
+                "",
+                "jar"));
     var lib = Path.of("lib");
     for (var coordinate : coordinates) {
       PathSupport.copy(
@@ -51,7 +68,8 @@ public class Migrate {
             "-XDaccessInternalAPI",
             "-XDcompilePolicy=simple",
             "-processorpath " + String.join(File.pathSeparator, jars),
-            "'-Xplugin:ErrorProne -XepPatchChecks:Refaster -XepPatchLocation:IN_PLACE'");
+            "'-Xplugin:ErrorProne -XepPatchChecks:TestNGJUnitMigration,Refaster"
+                + " -XepPatchLocation:IN_PLACE'");
     var compilerArgsFile = Files.write(temporary.resolve("compiler.args"), compilerArgs);
 
     // Run `jtreg` with all batteries included
