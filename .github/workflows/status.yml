@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  status:
     runs-on: ubuntu-latest
     steps:
       - name: 'Check out repository'
@@ -22,3 +22,5 @@ jobs:
           release: 22
       - name: 'Run status program'
         run: java @status
+      - name: 'Show version of jtreg'
+        run: java @jtreg -version

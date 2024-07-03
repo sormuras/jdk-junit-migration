@@ -1,0 +1,5 @@
+# Usage: java [JVM-OPTIONS...] @jtreg [ARGS...]
+.bach/src/run/tool/JTReg.java
+-r:tmp/JTReport
+-w:tmp/JTWork
+-agentvm
