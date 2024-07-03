@@ -1,3 +1,6 @@
+[submodule "bach"]
+	path = .bach/src/run/bach
+	url = https://github.com/sormuras/run.bach
 [submodule "openjdk"]
 	path = github/openjdk/jdk
 	url = https://github.com/openjdk/jdk
