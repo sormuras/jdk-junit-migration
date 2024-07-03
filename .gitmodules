@@ -1,0 +1,3 @@
+[submodule "openjdk"]
+	path = github/openjdk/jdk
+	url = https://github.com/openjdk/jdk
