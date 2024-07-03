@@ -1,0 +1,2 @@
+# Usage: java [JVM-OPTIONS...] @check [ARGS...]
+.bach/src/Verify.java

@@ -1,2 +1,0 @@
-# Usage: java [JVM-OPTIONS...] @bach [OPTIONS...] TOOL [ARGS...]
-.bach/src/run/bach/Main.java

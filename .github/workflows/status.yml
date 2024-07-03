@@ -22,5 +22,5 @@ jobs:
           release: 22
       - name: 'Run status program'
         run: java @status
-      - name: 'Show version of jtreg'
-        run: java @jtreg -version
+      - name: 'Run smoke test'
+        run: java @verify -va github/openjdk/jdk/test/jdk/jdk/nio/Basic.java
