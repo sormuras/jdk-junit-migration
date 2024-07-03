@@ -6,7 +6,7 @@ public class Status {
   public static void main(String... args) throws Exception {
     var start = Path.of("github", "openjdk", "jdk", "test");
     System.out.printf("Walking file tree %s...%n", start.toUri());
-    if (Files.isDirectory(start)) {
+    if (!Files.isDirectory(start)) {
       throw new Error(
           "Start directory does not exist. Forgot to check out with submodules?\n"
               + "\tgit submodule update --init --recursive");
