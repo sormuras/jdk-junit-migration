@@ -6,9 +6,6 @@
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import run.bach.ToolCall;
@@ -17,12 +14,21 @@ import run.bach.internal.PathSupport;
 import run.tool.JTReg;
 
 public class Migrate {
-  static final boolean verbose = Boolean.getBoolean("ebug");
-
   public static void main(String... args) throws Exception {
     // Install JTReg tool
     var jtreg = new JTReg().install();
-    if (verbose) jtreg.run("-version");
+
+    // Always create a new target directory to ensure compilation
+    var temporary = PathHelper.createLocalTemporaryDirectoryWithTimestamp();
+    var lib = Path.of("lib");
+
+    // Build project-local javac plugin
+    ToolCall.of("javac").add("-d", temporary.resolve("classes")).addFiles("src/**/*.java").run();
+    ToolCall.of("jar", "--create")
+        .add("--file", lib.resolve("plugin.jar"))
+        .add("-C", "src", ".")
+        .add("-C", temporary.resolve("classes"), ".")
+        .run();
 
     // Grab required libraries
     var coordinates =
@@ -50,7 +56,7 @@ public class Migrate {
                 "gdejong~testng-migrator-SNAPSHOT",
                 "",
                 "jar"));
-    var lib = Path.of("lib");
+
     for (var coordinate : coordinates) {
       PathSupport.copy(
           lib.resolve(coordinate.artifact() + '-' + coordinate.version() + ".jar"),
@@ -61,25 +67,22 @@ public class Migrate {
       stream.forEach(jar -> jars.add(jar.toAbsolutePath().toString()));
     }
 
-    // Always create a new target directory to ensure compilation
-    var timestamp =
-        OffsetDateTime.now(ZoneOffset.UTC)
-            .format(DateTimeFormatter.ofPattern("uuuuMMdd'T'HHmmssX"));
-    var temporary = Files.createDirectories(Path.of("tmp", timestamp));
-
     // Create local argument file for `javac` call
-    var compilerArgs =
-        List.of(
-            "-XDaccessInternalAPI",
-            "-XDcompilePolicy=simple",
-            "-processorpath " + String.join(File.pathSeparator, jars),
-            "'-Xplugin:ErrorProne -XepPatchChecks:TestNGJUnitMigration,Refaster"
-                + " -XepPatchLocation:IN_PLACE'");
-    var compilerArgsFile = Files.write(temporary.resolve("compiler.args"), compilerArgs);
+    var compilerArgsFile =
+        Files.write(
+            temporary.resolve("compiler.args"),
+            List.of(
+                "-XDaccessInternalAPI",
+                "-XDcompilePolicy=simple",
+                "-processorpath " + String.join(File.pathSeparator, jars),
+                "'-Xplugin:ErrorProne"
+                    + " -XepPatchChecks:TestNGJUnitMigration,Refaster"
+                    + " -XepPatchLocation:IN_PLACE"
+                    + "'",
+                "'-Xplugin:LineEditor'"));
 
     // Run `jtreg` with all batteries included
     ToolCall.of(jtreg)
-        .when(verbose, "-va")
         .add("-agentvm")
         .add("-r:" + temporary.resolve("JTReport"))
         .add("-w:" + temporary.resolve("JTWork"))

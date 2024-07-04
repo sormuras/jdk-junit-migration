@@ -3,11 +3,6 @@
  * Licensed under the Universal Permissive License v 1.0 -> https://opensource.org/license/upl
  */
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import run.bach.ToolCall;
 import run.tool.JTReg;
 
@@ -17,10 +12,7 @@ public class Verify {
     var jtreg = new JTReg().install();
 
     // Always create a new target directory to ensure compilation
-    var timestamp =
-        OffsetDateTime.now(ZoneOffset.UTC)
-            .format(DateTimeFormatter.ofPattern("uuuuMMdd'T'HHmmssX"));
-    var temporary = Files.createDirectories(Path.of("tmp", timestamp));
+    var temporary = PathHelper.createLocalTemporaryDirectoryWithTimestamp();
 
     // Run `jtreg`
     ToolCall.of(jtreg)
