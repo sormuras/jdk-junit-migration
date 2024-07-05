@@ -51,7 +51,7 @@ public class LineEditor implements Plugin, TaskListener {
             remove(iterator, line, "org.testng."); // dangling imports
             replace(iterator, line, "@run testng", "@run junit"); // jtreg action
           }
-          Files.writeString(sourceFilePath, String.join("\n", sourceLines));
+          Files.writeString(sourceFilePath, String.join("\n", sourceLines) + '\n');
         }
       } catch (Exception exception) {
         throw new RuntimeException(exception);
