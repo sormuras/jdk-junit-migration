@@ -20,7 +20,7 @@ import run.bach.ToolRunner;
  * @see <a href="https://github.com/openjdk/jtreg">https://github.com/openjdk/jtreg</a>
  */
 public record JTReg(String version) implements ToolInstaller {
-  public static final String DEFAULT_VERSION = "7.4+1";
+  public static final String DEFAULT_VERSION = "8+2";
 
   public static void main(String... args) {
     var version = System.getProperty("version", DEFAULT_VERSION);
