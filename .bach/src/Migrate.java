@@ -34,7 +34,7 @@ public class Migrate {
     var coordinates =
         List.of(
             MavenCoordinate.ofCentral(
-                "com.google.errorprone", "error_prone_core", "2.27.1", "with-dependencies"),
+                "com.google.errorprone", "error_prone_core", "2.41.0", "with-dependencies"),
             new MavenCoordinate(
                 "jitpack.io/com/github/PicnicSupermarket",
                 "error-prone-support",
@@ -74,12 +74,14 @@ public class Migrate {
             List.of(
                 "-XDaccessInternalAPI",
                 "-XDcompilePolicy=simple",
+                "--should-stop=ifError=FLOW",
                 "-processorpath " + String.join(File.pathSeparator, jars),
                 "'-Xplugin:ErrorProne"
                     + " -XepPatchChecks:TestNGJUnitMigration,Refaster"
                     + " -XepPatchLocation:IN_PLACE"
-                    + "'",
-                "'-Xplugin:LineEditor'"));
+                    + "'"
+                    // , "'-Xplugin:LineEditor'"
+            ));
 
     // Run `jtreg` with all batteries included
     ToolCall.of(jtreg)
